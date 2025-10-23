@@ -1,0 +1,38 @@
+
+server:
+  port: 8085
+
+spring:
+  application:
+    name: gateway-service
+
+  cloud:
+    gateway:
+      routes:
+        - id: wallet-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/wallet-service/**
+          filters:
+            - StripPrefix=1
+
+        - id: history-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/history-service/**
+          filters:
+            - StripPrefix=1
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - name: Wallet Service
+        url: /v3/api-docs/wallet
+      - name: History Service
+        url: /v3/api-docs/history
+    urls-primary-name: Wallet Service
+  api-docs:
+    groups:
+      enabled: true
