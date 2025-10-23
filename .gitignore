@@ -34,3 +34,5 @@ build/
 
 docker/tmp
 logs
+.mvn
+mvnw.cmd

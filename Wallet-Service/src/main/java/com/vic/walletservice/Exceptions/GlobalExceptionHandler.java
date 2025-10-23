@@ -60,27 +60,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-    /**
-     * Handles insufficient funds errors.
-     */
-    @ExceptionHandler(InsufficientFundsException.class)
-    public ResponseEntity<Map<String, String>> handleInsufficientFunds(InsufficientFundsException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-        log.error(response.toString());
-        return ResponseEntity.badRequest().body(response);
-    }
 
-    /**
-     * Handles duplicate transaction errors.
-     */
-    @ExceptionHandler(DuplicateTransactionException.class)
-    public ResponseEntity<Map<String, String>> handleDuplicateTransaction(DuplicateTransactionException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-        log.error(response.toString());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-    }
 
     /**
      * Handles invalid amount errors.
