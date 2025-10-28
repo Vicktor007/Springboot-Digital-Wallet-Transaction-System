@@ -1,5 +1,6 @@
 package com.vic.walletservice.Config;
 
+import org.springframework.beans.factory.annotation.Value;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
@@ -16,6 +17,10 @@ import java.util.List;
 @Configuration
 public class OpenApiConfig {
 
+
+    @Value("${serverUrl}")
+    private String serverUrl;
+
     @Bean
     public OpenAPI walletServiceOpenAPI() {
         return new OpenAPI()
@@ -28,7 +33,7 @@ public class OpenApiConfig {
                                 """)
                 )
                 .servers(List.of(
-                        new Server().url("http://localhost:8080").description("Local Development Server")
+                        new Server().url(serverUrl).description("Local Development Server")
                 ));
     }
 }

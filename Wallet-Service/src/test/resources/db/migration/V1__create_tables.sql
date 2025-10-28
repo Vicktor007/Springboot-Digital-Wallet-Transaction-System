@@ -13,8 +13,8 @@ CREATE TABLE wallet_transactions
     id VARCHAR(36) PRIMARY KEY,
     wallet_id VARCHAR(36) NOT NULL,
     amount DECIMAL(19,4) NOT NULL,
-    type VARCHAR(20) NOT NULL, -- 'FUND', 'TRANSFER_OUT', 'TRANSFER_IN'
-    status VARCHAR(20) NOT NULL, -- 'COMPLETED', 'FAILED'
+    type VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (wallet_id) REFERENCES wallets(id)
 )

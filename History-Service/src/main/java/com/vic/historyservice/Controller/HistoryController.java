@@ -1,6 +1,6 @@
 package com.vic.historyservice.Controller;
 
-import com.vic.historyservice.Models.Transaction_events;
+import com.vic.historyservice.Models.TransactionEvents;
 import com.vic.historyservice.Service.HistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +32,7 @@ public class HistoryController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Transaction history retrieved successfully",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Transaction_events.class),
+                                    schema = @Schema(implementation = TransactionEvents.class),
                                     examples = @ExampleObject(value = """
                                             [
                                               {
@@ -78,7 +78,7 @@ public class HistoryController {
             }
     )
     @GetMapping("/wallets/{walletId}/history")
-    public ResponseEntity<List<Transaction_events>> getWalletHistory(@PathVariable String walletId) {
+    public ResponseEntity<List<TransactionEvents>> getWalletHistory(@PathVariable String walletId) {
         return ResponseEntity.ok(historyService.getWalletHistory(walletId));
     }
 
@@ -89,7 +89,7 @@ public class HistoryController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "User activity history retrieved successfully",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = Transaction_events.class),
+                                    schema = @Schema(implementation = TransactionEvents.class),
                                     examples = @ExampleObject(value = """
                                             [
                                               {
@@ -136,7 +136,7 @@ public class HistoryController {
             }
     )
     @GetMapping("/users/{userId}/activity")
-    public ResponseEntity<List<Transaction_events>> getUserActivityHistory(@PathVariable String userId) {
+    public ResponseEntity<List<TransactionEvents>> getUserActivityHistory(@PathVariable String userId) {
         return ResponseEntity.ok(historyService.getUserHistory(userId));
     }
 }

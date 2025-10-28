@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "wallet_transactions")
 @EntityListeners(AuditingEntityListener.class)
-public class Wallet_transactions {
+public class WalletTransactions {
 
     @Id
     @GeneratedValue(generator = "uuid")
@@ -21,7 +21,7 @@ public class Wallet_transactions {
     @Column(length = 36, nullable = false, updatable = false)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY) // lazy fetch is recommended
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id", nullable = false, foreignKey = @ForeignKey(name = "fk_wallet_transactions_wallet"))
     private Wallet wallet;
 
@@ -47,10 +47,10 @@ public class Wallet_transactions {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Wallet_transactions() {
+    public WalletTransactions() {
     }
 
-    public Wallet_transactions(Wallet from, BigDecimal amount, String s, String s1, TransactionType transactionType, TransactionStatus transactionStatus) {
+    public WalletTransactions(Wallet from, BigDecimal amount, String s, String s1, TransactionType transactionType, TransactionStatus transactionStatus) {
     }
 
     public String getId() {

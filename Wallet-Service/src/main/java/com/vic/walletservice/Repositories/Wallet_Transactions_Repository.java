@@ -1,7 +1,7 @@
 package com.vic.walletservice.Repositories;
 
-import com.vic.walletservice.Models.Wallet_transactions;
+import com.vic.walletservice.Models.WalletTransactions;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface Wallet_Transactions_Repository extends JpaRepository<Wallet_transactions, String> {
+public interface WalletTransactions_Repository extends JpaRepository<WalletTransactions, String> {
 }

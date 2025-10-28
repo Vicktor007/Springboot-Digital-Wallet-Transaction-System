@@ -14,14 +14,13 @@ public class GatewayCorsConfig {
     @Bean
     public CorsWebFilter swaggerCorsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // your frontend origin
+        config.setAllowedOrigins(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        // ✅ Only enable CORS for swagger /v3/api-docs paths
         source.registerCorsConfiguration("/v3/api-docs/**", config);
         source.registerCorsConfiguration("/swagger-ui/**", config);
 

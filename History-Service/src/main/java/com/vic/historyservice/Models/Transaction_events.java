@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 
 @Schema(description = "Unique ID for this transaction event", example = "tx-event-001")
 @Entity
-@Table(name = "Transaction_events")
+@Table(name = "transaction_events")
 @EntityListeners(AuditingEntityListener.class)
-public class Transaction_events {
+public class TransactionEvents {
     @Id
     @GeneratedValue(generator = "uuid")
     @UuidGenerator
@@ -54,7 +54,7 @@ public class Transaction_events {
     @Column(columnDefinition = "jsonb", name = "event_data")
     private Object eventData;
 
-    public Transaction_events() {
+    public TransactionEvents() {
     }
 
     public String getId() {

@@ -2,8 +2,9 @@ package com.vic.historyservice.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vic.historyservice.Dtos.WalletEvent;
-import com.vic.historyservice.Models.Transaction_events;
+import com.vic.historyservice.Models.TransactionEvents;
 import com.vic.historyservice.Repository.TransactionEventsRepository;
+import com.vic.historyservice.Service.HistoryService;
 import org.apache.kafka.common.errors.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,56 +25,47 @@ import java.time.LocalDateTime;
  * if a transaction with the same ID already exists in the system.
  * it manually acknowledges events after it has been saved.
  *
-  */
+ */
 
 @Service
 public class KafkaConsumer {
 
     private final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
 
-    private final TransactionEventsRepository transactionEventsRepository;
+    private final HistoryService historyService;
 
-
-    public KafkaConsumer(TransactionEventsRepository transactionEventsRepository) {
-        this.transactionEventsRepository = transactionEventsRepository;
+    public KafkaConsumer( HistoryService historyService) {
+        this.historyService = historyService;
     }
 
     @RetryableTopic(
-            attempts = "3",
-            backoff = @Backoff(delay = 1000, multiplier = 2.0),
-            autoCreateTopics = "false",
+            attempts = "${kafka.retry.attempts}",
+            backoff = @Backoff(
+                    delayExpression = "${kafka.retry.backoff.delay}",
+                    multiplierExpression = "${kafka.retry.backoff.multiplier}"
+            ),
+            autoCreateTopics = "${kafka.retry.auto-create-topics}",
             include = {DataAccessException.class, TimeoutException.class}
     )
-    @KafkaListener(topics = "wallet_event_topic", groupId = "wallet_events")
+    @KafkaListener(
+            topics = "${kafka.consumer.topic}",
+            groupId = "${kafka.consumer.group-id}"
+    )
     public void consumeWalletCreationEventNotification(ConsumerRecord<String, WalletEvent> record, Acknowledgment acknowledgment ) throws JsonProcessingException {
 
         WalletEvent walletEvent = record.value();
         try {
             log.info("Consuming wallet event notification :: {}", walletEvent.toString());
 
-            // checking for idempotency
-            if (transactionEventsRepository.existsByTransactionId(walletEvent.transactionId())) {
-                log.info("Wallet event already exists :: {}", walletEvent.transactionId());
-                acknowledgment.acknowledge();
-                return;
-            }
 
-            Transaction_events newTransactionEvents = new Transaction_events();
-            newTransactionEvents.setEvent_type(walletEvent.eventType());
-            newTransactionEvents.setWalletId(walletEvent.walletId());
-            newTransactionEvents.setUserId(walletEvent.userId());
-            newTransactionEvents.setAmount(walletEvent.amount());
-            newTransactionEvents.setTransactionId(walletEvent.transactionId());
-            newTransactionEvents.setTransactionType(walletEvent.transactionType());
-            newTransactionEvents.setEventData(walletEvent);
-            newTransactionEvents.setCreatedAt(LocalDateTime.now());
 
-            transactionEventsRepository.save(newTransactionEvents);
+
+            historyService.saveWalletEvent(walletEvent);
 
             acknowledgment.acknowledge();
         } catch (Exception e) {
             log.error("Error while saving wallet event notification :: {}", walletEvent, e);
-           acknowledgment.acknowledge();
+            acknowledgment.acknowledge();
         }
     }
 
