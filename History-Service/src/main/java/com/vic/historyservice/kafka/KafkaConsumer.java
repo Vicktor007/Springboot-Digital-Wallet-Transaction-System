@@ -57,9 +57,6 @@ public class KafkaConsumer {
         try {
             log.info("Consuming wallet event notification :: {}", walletEvent.toString());
 
-
-
-
             historyService.saveWalletEvent(walletEvent);
 
             acknowledgment.acknowledge();
