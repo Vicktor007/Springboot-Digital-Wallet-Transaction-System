@@ -62,7 +62,7 @@ public class KafkaConsumer {
             acknowledgment.acknowledge();
         } catch (Exception e) {
             log.error("Error while saving wallet event notification :: {}", walletEvent, e);
-            throw e;
+            throw e; // triggers retry topic
         }
     }
 
