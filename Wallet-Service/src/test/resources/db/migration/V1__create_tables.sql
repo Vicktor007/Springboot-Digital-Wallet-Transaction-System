@@ -1,0 +1,20 @@
+CREATE TABLE wallets
+(
+    id VARCHAR(36) PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL,
+    balance DECIMAL(19, 4) NOT NULL DEFAULT 0,
+    version BIGINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE wallet_transactions
+(
+    id VARCHAR(36) PRIMARY KEY,
+    wallet_id VARCHAR(36) NOT NULL,
+    amount DECIMAL(19,4) NOT NULL,
+    type VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (wallet_id) REFERENCES wallets(id)
+)
